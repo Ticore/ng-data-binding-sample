@@ -1,0 +1,26 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>$digest error</title>
+</head>
+<body   ng-app="app"
+        ng-init="a = 0; b = 0;"
+        ng-controller="mainCtrl">
+
+    <p ti-bind="{{ lazy1('a = b + 1') }}">a : {{ a }}</p>
+    <p ti-bind="{{ lazy2('b = a + 1') }}">b : {{ b }}</p>
+
+    <script type="text/javascript" src="../libs/angular-1.1.5.js"></script>
+    <script type="text/javascript" src="../libs/ngLazyBind.js"></script>
+    <script type="text/javascript">
+        var app = angular.module("app", ["lazyBind"]);
+
+        var mainCtrlFn = function($scope, $lazyBind) {
+            $scope.lazy1 = $lazyBind($scope, false, 10);
+            $scope.lazy2 = $lazyBind($scope, false, 10);
+        };
+        app.controller("mainCtrl", mainCtrlFn);
+    </script>
+</body>
+</html>

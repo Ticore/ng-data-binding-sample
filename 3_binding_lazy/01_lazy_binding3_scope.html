@@ -1,0 +1,40 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lazy Binding</title>
+    <style type="text/css">
+
+    </style>
+    <script type="text/javascript" src="../libs/angular-1.1.5.js"></script>
+    <script type="text/javascript" src="../libs/ngLazyBind.js"></script>
+    <script>
+
+        // lazy 對象能套用當下 scope
+        var app = angular.module("app", ["lazyBind"]);
+
+        var mainCtrlFn = function($scope, $timeout, $lazyBind) {
+            $scope.lazy = $lazyBind($scope);
+            $scope.value = "Main";
+        };
+
+        app.controller("mainCtrl", mainCtrlFn);
+
+        var childCtrlFn = function($scope, $timeout, $lazyBind) {
+            $scope.lazy = $lazyBind($scope);
+            $scope.value = "Child";
+        };
+
+        app.controller("childCtrl", childCtrlFn);
+
+    </script>
+</head>
+<body ng-app="app" ng-controller="mainCtrl">
+    <p>
+        lazy('value') : {{ lazy('value') }}
+    </p>
+    <p ng-controller="childCtrl">
+        lazy('value') : {{ lazy('value') }}
+    </p>
+</body>
+</html>

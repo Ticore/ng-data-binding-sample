@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>$observe</title>
+</head>
+<body   ng-app="app"
+        ng-controller="mainCtrl"
+        ng-init="i='Hello!'"
+        ti-attr="{{ i }}">
+
+    <input type="text" ng-model="i">
+
+    <script type="text/javascript" src="../libs/angular-1.1.5.js"></script>
+    <script type="text/javascript">
+
+        var app = angular.module("app", []);
+
+        var mainCtrlFn = function($scope, $attrs, $interpolate) {
+
+            /*
+            觀察 attribute interpolate 後資料的變化
+            它必須是 interpolation 表示式，才可以被觀察
+            */
+            $attrs.$observe("tiAttr", function(val) {
+                console.log(val);
+            });
+
+            /*
+            手動透過 $interpolate 觀察資料的變化
+            */
+            $scope.$watch($interpolate("{{ i }}"), function(val) {
+                console.log(val);
+            });
+
+            console.log($interpolate("{{ i }}")({ i : "--"}));
+
+        };
+        app.controller("mainCtrl", mainCtrlFn);
+
+    </script>
+</body>
+</html>

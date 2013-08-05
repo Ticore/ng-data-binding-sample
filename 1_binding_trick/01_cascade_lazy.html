@@ -1,0 +1,42 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cascade Binding</title>
+    <style type="text/css">
+        input[type=text] {
+            text-align: center;
+        }
+    </style>
+</head>
+<body ng-app="app" ng-controller="mainCtrl">
+
+    <div>
+        a : <input type="text" ng-model="a"></input><br/>
+        b : <span ng-bind="b = lazy0('a')"></span><br/>
+        c : <span ng-bind="c = lazy1('b')"></span><br/>
+        d : <span ng-bind="d = lazy2('c')"></span><br/>
+        e : <span ng-bind="e = lazy3('d')"></span><br/>
+        f : <span ng-bind="f = lazy4('e')"></span><br/>
+        g : <span ng-bind="e = lazy5('f')"></span><br/>
+    </div>
+
+    <script type="text/javascript" src="../libs/angular-1.1.5.js"></script>
+    <script type="text/javascript" src="../libs/ngLazyBind.js"></script>
+    <script type="text/javascript">
+
+        var app = angular.module("app", ["lazyBind"]);
+
+        var mainCtrlFn = function($scope, $timeout, $lazyBind) {
+
+            $scope.lazy = $lazyBind($scope);
+
+            for (var i = 0 ; i < 10 ; ++i) {
+                $scope["lazy" + i] = $lazyBind($scope, true, 2000);
+            }
+        };
+        app.controller("mainCtrl", mainCtrlFn);
+
+    </script>
+</body>
+</html>

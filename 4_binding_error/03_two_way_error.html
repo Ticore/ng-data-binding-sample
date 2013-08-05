@@ -1,0 +1,12 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>$digest error</title>
+</head>
+<body ng-app ng-init="a = 0; b = 0;">
+    <p ti-bind="{{ a = b + 1 }}">a : {{ a }}</p>
+    <p ti-bind="{{ b = a + 1 }}">b : {{ b }}</p>
+    <script type="text/javascript" src="../libs/angular-1.1.5.js"></script>
+</body>
+</html>

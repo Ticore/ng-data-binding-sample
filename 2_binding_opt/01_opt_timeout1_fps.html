@@ -1,0 +1,94 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body ng-app="app" ng-controller="mainCtrl">
+
+    <div>
+        time: <span ng-bind="getTime();"></span><br/>
+        sum: <span ng-bind="getSum();"></span><br/>
+        <button ng-click="updateModel();">Update Model</button>
+    </div>
+    <script type="text/javascript" src="../libs/angular-1.1.5.js"></script>
+    <script type="text/javascript">
+
+        var app = angular.module("app", []);
+
+        var mainCtrlFn = function($scope, $timeout) {
+
+            // model
+            $scope.model = [];
+            $scope.updateModel = function() {
+                var newModel = [];
+                for (var i = 0 ; i < 10000 ; ++i) {
+                    newModel.push(Math.random() * 10000);
+                }
+                this.model = newModel;
+            };
+
+            $scope.getSum = function() {
+                var c = 0;
+                for (var i = 0 ; i < this.model.length ; ++i) {
+                    c += this.model[i];
+                }
+                return c;
+            };
+
+
+            // time
+            $scope.time = new Date();
+            $scope.getTime = function() {
+                return this.time;
+            };
+
+
+            // 計算 $digest fps
+            var count = 0;
+            var startTime = new Date().getTime();
+
+            $scope.$watch(function() {
+                console.log("fps:", Math.round(++count /
+                    (new Date().getTime() - startTime) * 1000));
+            });
+
+
+            // 大量 $timeout 事件
+            (function() {
+                $scope.updateModel();
+                var args = arguments;
+                $timeout(function() {
+                    args.callee();
+                }, 1000);
+            })();
+
+            (function() {
+                $scope.time = new Date();
+                var args = arguments;
+                $timeout(function() {
+                    args.callee();
+                }, 500);
+            })();
+
+            (function() {
+                //......
+                var args = arguments;
+                $timeout(function() {
+                    args.callee();
+                }, 500);
+            })();
+
+            (function() {
+                //......
+                var args = arguments;
+                $timeout(function() {
+                    args.callee();
+                }, 500);
+            })();
+        };
+        app.controller("mainCtrl", mainCtrlFn);
+
+    </script>
+</body>
+</html>

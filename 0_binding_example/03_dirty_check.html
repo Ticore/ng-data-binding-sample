@@ -1,0 +1,27 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dirty Check</title>
+</head>
+<body ng-app="app" ng-controller="mainCtrl">
+    <input type="number" ng-model="i"></input>
+    <script src="../libs/angular-1.1.5.js"></script>
+    <script>
+        var app = angular.module("app", []);
+        app.controller("mainCtrl", function($scope) {
+            $scope.i = 100;
+
+            $scope.getI = function() {
+                console.log("getI();");
+                var rn = Math.random();
+                return rn > 0.5 ? this.i : rn;
+            };
+
+            $scope.$watch("getI()", function(value) {
+                console.log("i : ", value);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        html, body {
+            height: 100%;
+        }
+    </style>
+</head>
+<body ng-app="app" ng-controller="mainCtrl" ng-mousemove="">
+
+    <script type="text/javascript" src="../libs/angular-1.1.5.js"></script>
+    <script type="text/javascript">
+
+        var app = angular.module("app", []);
+
+        var mainCtrlFn = function($scope, $timeout) {
+            $scope.$watch(function() {
+                console.log("$digest();");
+            });
+        };
+        app.controller("mainCtrl", mainCtrlFn);
+
+    </script>
+</body>
+</html>

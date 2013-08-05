@@ -1,0 +1,57 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+    .over {
+        color: red;
+    }
+    .out {
+        color: blue;
+    }
+    </style>
+</head>
+<body ng-app="app" ng-controller="mainCtrl">
+
+    <div>
+        sum: <span ng-bind="getSum();"></span><br/>
+        <button ng-click="updateModel();">Update Model</button><br/>
+        <button
+            ng-class="over ? 'over' : 'out'"
+            ng-mouseover="over=true;"
+            ng-mouseout="over=false;">Button</button>
+    </div>
+    <script type="text/javascript" src="../libs/angular-1.1.5.js"></script>
+    <script type="text/javascript">
+
+        var app = angular.module("app", []);
+
+        var mainCtrlFn = function($scope, $timeout) {
+
+            // model
+            $scope.model = [];
+            $scope.updateModel = function() {
+                var newModel = [];
+                for (var i = 0 ; i < 10000000 ; ++i) {
+                    newModel.push(Math.random() * 100);
+                }
+                this.model = newModel;
+            };
+
+            $scope.getSum = function() {
+                console.log("getSum");
+                var c = 0;
+                for (var i = 0 ; i < this.model.length ; ++i) {
+                    c += this.model[i];
+                }
+                return c;
+            };
+
+            $scope.updateModel();
+        };
+        app.controller("mainCtrl", mainCtrlFn);
+
+    </script>
+</body>
+</html>

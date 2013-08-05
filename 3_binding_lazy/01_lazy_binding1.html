@@ -1,0 +1,78 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lazy Binding</title>
+    <style type="text/css">
+
+        input {
+            text-align: center;
+        }
+
+    </style>
+    <script type="text/javascript" src="../libs/angular-1.1.5.js"></script>
+    <script type="text/javascript" src="../libs/ngLazyBind.js"></script>
+    <script>
+
+        var app = angular.module("app", ["lazyBind"]);
+
+        var mainCtrlFn = function($scope, $timeout, $lazyBind) {
+
+            $scope.cacheTime = 1000;
+            $scope.isCopy = true;
+            $scope.lazy = $lazyBind($scope, $scope.isCopy, $scope.cacheTime);
+
+            $scope.model = {};
+
+
+            var updatePromise;
+            $scope.startUpdate = function() {
+                // 頻繁地變更 Model
+                updatePromise ||
+                (function() {
+                    var args = arguments;
+                    updatePromise = $timeout(function() {
+                        $scope.model.time = new Date();
+                        args.callee();
+                    }, 10);
+                })();
+            };
+
+            $scope.stopUpdate = function() {
+                if (updatePromise) {
+                    $timeout.cancel(updatePromise);
+                    updatePromise = null;
+                }
+            };
+
+        };
+
+        app.controller("mainCtrl", mainCtrlFn);
+
+    </script>
+</head>
+<body ng-app="app" ng-controller="mainCtrl">
+    <p>
+        model.time : {{ model.time }} <br/>
+        lazy('model.time') : {{ lazy('model.time') }} <br/>
+        <!-- 只要 n-model exp 最後是屬性結尾，就可以做雙向綁定 -->
+        lazy('model').time : 
+        <input type="text" ng-model="lazy('model').time" size="50"></input><br/>
+    </p>
+    <p>
+        <button ng-click="lazy.flush();">Flush</button>
+        |
+        <button ng-click="startUpdate();">Start Update</button>
+        <button ng-click="stopUpdate();">Stop Update</button>
+        <br/>
+        <label><input type="checkbox"
+            ng-model="isCopy"
+            ng-change="lazy.isCopy(isCopy);">
+        </input>isCopy</label>
+        |
+        cacheTime : 
+        <input type="number" min="100" max="3000" step="100"
+            ng-model="cacheTime" ng-change="lazy.cacheTime(cacheTime);"></input>
+    </p>
+</body>
+</html>

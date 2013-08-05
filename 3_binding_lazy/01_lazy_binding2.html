@@ -1,0 +1,97 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lazy Binding</title>
+    <style type="text/css">
+
+        input {
+            text-align: center;
+        }
+
+        .changing-area {
+            overflow: auto;
+            width: 600px;
+            height: 200px;
+            padding: 10px;
+            border: 1px solid #888;
+        }
+
+    </style>
+    <script type="text/javascript" src="../libs/angular-1.1.5.js"></script>
+    <script type="text/javascript" src="../libs/ngLazyBind.js"></script>
+    <script>
+
+        var app = angular.module("app", ["lazyBind"]);
+
+        var mainCtrlFn = function($scope, $timeout, $lazyBind) {
+
+            $scope.cacheTime = 1000;
+            $scope.isCopy = true;
+            $scope.lazy = $lazyBind($scope, $scope.isCopy, $scope.cacheTime);
+
+            $scope.model = [];
+
+
+            var updatePromise;
+            $scope.startUpdate = function() {
+                // 頻繁地變更 Model
+                updatePromise ||
+                (function() {
+                    var args = arguments;
+                    updatePromise = $timeout(function() {
+                        var newModel = [];
+                        var len = ~~(Math.random() * 100);
+                        for (var i = 0 ; i < len ; ++i) {
+                            newModel.push(~~(Math.random() * 100000));
+                        }
+                        $scope.model = newModel;
+                        args.callee();
+                    }, 10);
+                })();
+            };
+
+            $scope.stopUpdate = function() {
+                if (updatePromise) {
+                    $timeout.cancel(updatePromise);
+                    updatePromise = null;
+                }
+            };
+
+
+            $scope.$watch(function() {
+                console.log("$digest();");
+            });
+
+        };
+
+        app.controller("mainCtrl", mainCtrlFn);
+
+    </script>
+</head>
+<body ng-app="app" ng-controller="mainCtrl">
+    <p>ng-repeat="i in model"</p>
+    <div class="changing-area">
+        <span ng-repeat="i in model track by $index"> {{ i }} </span>
+    </div>
+    <p>ng-repeat="i in lazy('model')"</p>
+    <div class="changing-area">
+        <span ng-repeat="i in lazy('model') track by $index"> {{ i }} </span>
+    </div>
+    <p>
+        <button ng-click="lazy.flush();">Flush</button>
+        |
+        <button ng-click="startUpdate();">Start Update</button>
+        <button ng-click="stopUpdate();">Stop Update</button>
+        <br/>
+        <label><input type="checkbox"
+            ng-model="isCopy"
+            ng-change="lazy.isCopy(isCopy);">
+        </input>isCopy</label>
+        |
+        cacheTime : 
+        <input type="number" min="100" max="3000" step="100"
+            ng-model="cacheTime" ng-change="lazy.cacheTime(cacheTime);"></input>
+    </p>
+</body>
+</html>

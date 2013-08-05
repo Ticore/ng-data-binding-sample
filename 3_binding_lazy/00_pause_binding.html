@@ -1,0 +1,52 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AngularJS App</title>
+    <style type="text/css">
+
+        input {
+            text-align: center;
+        }
+
+    </style>
+    <script type="text/javascript" src="../libs/angular-1.1.5.js"></script>
+    <script>
+
+        /*/
+        以 model 為單位，暫停 watcher digest
+        //*/
+        var app = angular.module("app", []);
+
+        var mainCtrlFn = function($scope) {
+
+            $scope.pauseBinding = false;
+            $scope.model = { txt: "---" };
+            $scope.getModel = function() {
+                if (!this.pauseBinding) {
+                    // Unpause state - 計算結果存入快取
+                    this.clone = angular.copy(this.model);
+                    return this.model;
+                } else {
+                    // Pause state - 回傳上次快取資料
+                    return this.clone;
+                }
+            };
+
+        };
+
+        app.controller("mainCtrl", mainCtrlFn);
+
+    </script>
+</head>
+<body ng-app="app" ng-controller="mainCtrl">
+    <p>
+        Model: {{ model }} <br/>
+        <input type="text" ng-model="getModel().txt"></input>
+        <br/>
+        <input type="text" ng-model="getModel().txt"></input>
+        <br/>
+        <label><input type="checkbox" ng-model="pauseBinding"></input>Pause Binding</label>
+    </p>
+</body>
+</html>

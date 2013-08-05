@@ -1,0 +1,21 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Scope, Filter, Ternary</title>
+</head>
+<body ng-app="app" ng-controller="mainCtrl">
+    <input type="number" ng-model="i"></input>
+    <p ng-bind="i | currency"></p>
+    <p ng-bind="i * 1000 | date:'hh:mm:ss'"></p>
+    <p ng-bind="i > 100 ? 'i > 100' : 'i <= 100'"></p>
+    <script src="../libs/angular-1.1.5.js"></script>
+    <script>
+        var app = angular.module("app", []);
+        app.controller("mainCtrl", function($scope) {
+            $scope.i = 100;
+        });
+        var i = 200;
+    </script>
+</body>
+</html>

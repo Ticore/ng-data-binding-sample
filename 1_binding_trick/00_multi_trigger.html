@@ -1,0 +1,55 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Multiple Trigger</title>
+    <style type="text/css">
+        input[type=text] {
+            text-align: center;
+        }
+    </style>
+</head>
+<body ng-app="app" ng-controller="mainCtrl">
+
+    <div>
+        a : <input type="text" ng-model="a"></input><br/>
+        b : <input type="text" ng-model="b"></input><br/>
+        c : <input type="text" ng-model="c"></input><br/>
+        d : <input type="text" ng-model="d"></input>
+    </div>
+
+    <script type="text/javascript" src="../libs/angular-1.1.5.js"></script>
+    <script type="text/javascript">
+
+        var app = angular.module("app", []);
+
+        var mainCtrlFn = function($scope, $timeout) {
+
+            $scope.$watch("a", function() {
+                console.log("changed");
+            });
+
+            $scope.$watch("b", function() {
+                console.log("changed");
+            });
+
+            $scope.$watch("c", function() {
+                console.log("changed");
+            });
+
+            $scope.$watch("d", function() {
+                console.log("changed");
+            });
+
+
+            
+            // $scope.$watch("a + b + c + d", function() {
+            //     console.log("changed");
+            // });
+
+        };
+        app.controller("mainCtrl", mainCtrlFn);
+
+    </script>
+</body>
+</html>

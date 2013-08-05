@@ -1,0 +1,26 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>$digest error</title>
+</head>
+<body ng-app="app" ng-controller="mainCtrl">
+
+    <p ng-bind="fn();"></p>
+
+    <script type="text/javascript" src="../libs/angular-1.1.5.js"></script>
+    <script type="text/javascript">
+
+        var app = angular.module("app", []);
+
+        var mainCtrlFn = function($scope) {
+            $scope.fn = function() {
+                return new Boolean();
+            };
+        };
+
+        app.controller("mainCtrl", mainCtrlFn);
+
+    </script>
+</body>
+</html>
